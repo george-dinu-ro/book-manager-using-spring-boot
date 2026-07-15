@@ -31,18 +31,28 @@ public class BookRepository {
                 ));
     }
 
-    public List<Book> read() {
+    public List<Book> findAll() {
         return this.books;
     }
 
-    public Optional<Book> read(String title) {
+    public Optional<Book> findByTitle(String title) {
         return this.books.stream()
-                .filter(getBookByTitle(title))
+                .filter(filterByTitle(title))
                 .findFirst();
     }
 
-    private static Predicate<Book> getBookByTitle(String title) {
+    public List<Book> findByCategory(String category) {
+        return this.books.stream()
+                .filter(filterByCategory(category))
+                .toList();
+    }
+
+    private static Predicate<Book> filterByTitle(String title) {
         return book -> book.title().equalsIgnoreCase(title);
+    }
+
+    private static Predicate<Book> filterByCategory(String category) {
+        return book -> book.category().equalsIgnoreCase(category);
     }
 
 }

@@ -6,6 +6,7 @@ import my.work.book.manager.repository.BookRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -14,12 +15,14 @@ public class BookService {
 
     private final BookRepository bookRepository;
 
-    public List<Book> read() {
-        return bookRepository.read();
+    public List<Book> findAll(String category) {
+        return Objects.isNull(category)
+                ? bookRepository.findAll()
+                : bookRepository.findByCategory(category);
     }
 
-    public Optional<Book> read(String title) {
-        return bookRepository.read(title);
+    public Optional<Book> findByTitle(String title) {
+        return bookRepository.findByTitle(title);
     }
 
 }
