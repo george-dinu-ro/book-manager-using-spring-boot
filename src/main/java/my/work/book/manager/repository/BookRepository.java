@@ -6,6 +6,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
 
 @Component
 public class BookRepository {
@@ -13,8 +15,8 @@ public class BookRepository {
     private final List<Book> books = new ArrayList<>();
 
     @PostConstruct
-    private void init() {
-        books.addAll(
+    public void init() {
+        this.books.addAll(
                 List.of(
                         new Book("Clean Code", "Robert C. Martin", "Programming"),
                         new Book("Effective Java", "Joshua Bloch", "Programming"),
@@ -30,7 +32,17 @@ public class BookRepository {
     }
 
     public List<Book> read() {
-        return books;
+        return this.books;
+    }
+
+    public Optional<Book> read(String title) {
+        return this.books.stream()
+                .filter(getBookByTitlePredicate(title))
+                .findFirst();
+    }
+
+    private static Predicate<Book> getBookByTitlePredicate(String title) {
+        return book -> book.title().equalsIgnoreCase(title);
     }
 
 }

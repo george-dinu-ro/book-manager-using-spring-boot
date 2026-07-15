@@ -19,7 +19,7 @@ public class BookService {
     }
 
     public Optional<Book> read(String title) {
-        return Optional.empty();
+        return bookRepository.read(title);
     }
 
 }
