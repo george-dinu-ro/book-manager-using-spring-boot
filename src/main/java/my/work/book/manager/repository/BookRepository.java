@@ -29,4 +29,8 @@ public class BookRepository {
                 ));
     }
 
+    public List<Book> read() {
+        return books;
+    }
+
 }
