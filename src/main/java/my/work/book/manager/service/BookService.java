@@ -26,7 +26,9 @@ public class BookService {
     }
 
     public Book create(Book book) {
-        return null;
+        return bookRepository.findByTitle(book.title()).isEmpty()
+                ? bookRepository.create(book)
+                : null;
     }
 
 }

@@ -47,6 +47,11 @@ public class BookRepository {
                 .toList();
     }
 
+    public Book create(Book book) {
+        this.books.add(book);
+        return book;
+    }
+
     private static Predicate<Book> filterByTitle(String title) {
         return book -> book.title().equalsIgnoreCase(title);
     }

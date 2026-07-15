@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import my.work.book.manager.entity.Book;
 import my.work.book.manager.service.BookService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,7 +39,7 @@ public class BookController {
     ResponseEntity<Book> create(@RequestBody Book book) {
         var createBook = bookService.create(book);
         return Objects.nonNull(createBook)
-                ? ResponseEntity.ok(createBook)
+                ? ResponseEntity.status(HttpStatus.CREATED).body(createBook)
                 : ResponseEntity.status(HttpStatus.CONFLICT).build();
     }
 
