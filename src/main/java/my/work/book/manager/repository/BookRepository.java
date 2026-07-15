@@ -37,11 +37,11 @@ public class BookRepository {
 
     public Optional<Book> read(String title) {
         return this.books.stream()
-                .filter(getBookByTitlePredicate(title))
+                .filter(getBookByTitle(title))
                 .findFirst();
     }
 
-    private static Predicate<Book> getBookByTitlePredicate(String title) {
+    private static Predicate<Book> getBookByTitle(String title) {
         return book -> book.title().equalsIgnoreCase(title);
     }
 
