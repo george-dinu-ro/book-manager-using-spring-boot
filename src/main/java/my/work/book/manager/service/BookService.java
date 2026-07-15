@@ -25,4 +25,8 @@ public class BookService {
         return bookRepository.findByTitle(title);
     }
 
+    public Book create(Book book) {
+        return null;
+    }
+
 }
