@@ -6,6 +6,7 @@ import my.work.book.manager.repository.BookRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -15,6 +16,10 @@ public class BookService {
 
     public List<Book> read() {
         return bookRepository.read();
+    }
+
+    public Optional<Book> read(String title) {
+        return Optional.empty();
     }
 
 }

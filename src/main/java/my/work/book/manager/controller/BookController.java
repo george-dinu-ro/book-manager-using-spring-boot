@@ -25,7 +25,9 @@ public class BookController {
 
     @GetMapping("/{title}")
     ResponseEntity<Book> read(@PathVariable String title) {
-        return null;
+        return bookService.read(title)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
 }
