@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: book-manager
+
+springdoc:
+  swagger-ui:
+    path: /docs
