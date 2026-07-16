@@ -45,7 +45,7 @@ public class BookService {
                 : null;
     }
 
-    public boolean delete(int id) {
+    public boolean delete(@Positive int id) {
         return this.bookRepository.delete(id);
     }
 
