@@ -39,7 +39,7 @@ public class BookService {
     }
 
     public boolean delete() {
-        return false;
+        return this.bookRepository.delete();
     }
 
     private static boolean bookExists(int index) {
