@@ -53,9 +53,9 @@ public class BookRepository {
         return book;
     }
 
-    public int getIndex(String title) {
+    public int getIndex(int id) {
         return IntStream.range(0, this.books.size())
-                .filter(filterByIndex(title))
+                .filter(filterByIndex(id))
                 .findFirst()
                 .orElse(-1);
     }
@@ -80,8 +80,8 @@ public class BookRepository {
         return book -> book.category().equalsIgnoreCase(category);
     }
 
-    private IntPredicate filterByIndex(String title) {
-        return index -> this.books.get(index).title().equalsIgnoreCase(title);
+    private IntPredicate filterByIndex(int id) {
+        return index -> this.books.get(index).id() == id;
     }
 
 }

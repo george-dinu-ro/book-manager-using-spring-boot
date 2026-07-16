@@ -45,9 +45,9 @@ public class BookController {
                 : ResponseEntity.status(HttpStatus.CONFLICT).build();
     }
 
-    @PutMapping("/{title}")
-    ResponseEntity<Book> update(@PathVariable String title, @RequestBody Book book) {
-        var updatedBook = this.bookService.update(title, book);
+    @PutMapping("/{id}")
+    ResponseEntity<Book> update(@PathVariable int id, @RequestBody Book book) {
+        var updatedBook = this.bookService.update(id, book);
         return Objects.nonNull(updatedBook)
                 ? ResponseEntity.ok(updatedBook)
                 : ResponseEntity.notFound().build();

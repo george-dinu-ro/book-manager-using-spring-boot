@@ -31,10 +31,10 @@ public class BookService {
                 : null;
     }
 
-    public Book update(String title, Book book) {
-        var index = this.bookRepository.getIndex(title);
+    public Book update(int id, Book book) {
+        var index = this.bookRepository.getIndex(id);
         return bookExists(index)
-                ? updateAndGet(index, title, book)
+                ? updateAndGet(index, id, book)
                 : null;
     }
 
@@ -46,16 +46,17 @@ public class BookService {
         return (index > -1);
     }
 
-    private static Book getUpdatedBook(String title, Book book) {
+    private static Book getUpdatedBook(int id, Book book) {
         return Book.builder()
-                .title(title)
+                .id(id)
+                .title(book.title())
                 .author(book.author())
                 .category(book.category())
                 .build();
     }
 
-    private Book updateAndGet(int index, String title, Book book) {
-        var updateBook = getUpdatedBook(title, book);
+    private Book updateAndGet(int index, int id, Book book) {
+        var updateBook = getUpdatedBook(id, book);
         this.bookRepository.update(index, updateBook);
         return updateBook;
     }
