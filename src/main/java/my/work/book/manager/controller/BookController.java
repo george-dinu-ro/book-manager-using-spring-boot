@@ -1,10 +1,12 @@
 package my.work.book.manager.controller;
 
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import my.work.book.manager.entity.BookEntity;
 import my.work.book.manager.request.BookRequest;
 import my.work.book.manager.service.BookService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +23,7 @@ import java.util.Objects;
 
 @RequestMapping("/api/v1/books")
 @RestController
+@Validated
 @RequiredArgsConstructor
 public class BookController {
 
@@ -32,7 +35,7 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    ResponseEntity<BookEntity> findById(@PathVariable int id) {
+    ResponseEntity<BookEntity> findById(@PathVariable @Positive int id) {
         return this.bookService.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
