@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Objects;
 
 @RequestMapping("/api/v1/books")
 @RestController
@@ -39,12 +38,12 @@ public class BookController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Get all books", description = "Retrieve a list of all available books")
-    List<BookEntity> findAll(
+    ResponseEntity<List<BookEntity>> findAll(
             @RequestParam(required = false)
             @Parameter(description = "Optional query parameter")
             String category) {
 
-        return bookService.findAll(category);
+        return ResponseEntity.ok(this.bookService.findAll(category));
     }
 
     @GetMapping("/{id}")
@@ -56,9 +55,7 @@ public class BookController {
             @Parameter(description = "Id of the book to be retrieved")
             int id) {
 
-        return this.bookService.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(bookService.findById(id));
     }
 
     @PostMapping
@@ -70,7 +67,7 @@ public class BookController {
             BookRequest bookRequest) {
 
         var id = this.bookService.create(bookRequest);
-        return ResponseEntity.created(URI.create("/api/v1/books/" + id)).build();
+        return ResponseEntity.created(URI.create("/api/v1/books/%d".formatted(id))).build();
     }
 
     @PutMapping("/{id}")
@@ -86,11 +83,8 @@ public class BookController {
             @Valid
             BookRequest bookRequest) {
 
-        var updatedBook = this.bookService.update(id, bookRequest);
-
-        return Objects.nonNull(updatedBook)
-                ? ResponseEntity.noContent().build()
-                : ResponseEntity.notFound().build();
+        this.bookService.update(id, bookRequest);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
@@ -102,9 +96,8 @@ public class BookController {
             @Parameter(description = "Id of the book to be deleted")
             int id) {
 
-        return this.bookService.delete(id)
-                ? ResponseEntity.noContent().build()
-                : ResponseEntity.notFound().build();
+        this.bookService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

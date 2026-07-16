@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import my.work.book.manager.entity.BookEntity;
+import my.work.book.manager.exception.BookNotFoundException;
 import my.work.book.manager.mapper.RequestToEntityMapper;
 import my.work.book.manager.repository.BookRepository;
 import my.work.book.manager.request.BookRequest;
@@ -12,12 +13,13 @@ import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 @Validated
 @RequiredArgsConstructor
 public class BookService {
+
+    private static final String BOOK_NOT_FOUND_MESSAGE = "Book with id [%d] not found";
 
     private final BookRepository bookRepository;
 
@@ -29,8 +31,9 @@ public class BookService {
                 : this.bookRepository.findByCategory(category);
     }
 
-    public Optional<BookEntity> findById(@Positive(message = "Id must be positive") long id) {
-        return this.bookRepository.findById(id);
+    public BookEntity findById(@Positive(message = "Id must be positive") long id) {
+        return this.bookRepository.findById(id)
+                .orElseThrow(() -> new BookNotFoundException(BOOK_NOT_FOUND_MESSAGE.formatted(id)));
     }
 
     public long create(@Valid BookRequest bookRequest) {
@@ -39,28 +42,34 @@ public class BookService {
         return this.bookRepository.create(bookEntity);
     }
 
-    public BookEntity update(
+    public void update(
             @Positive(message = "Id must be positive") int id,
             @Valid BookRequest bookRequest) {
 
         var index = this.bookRepository.getIndex(id);
-        return bookExists(index)
-                ? updateAndGet(index, id, bookRequest)
-                : null;
+
+        if (!bookExists(index)) {
+            throw new BookNotFoundException(BOOK_NOT_FOUND_MESSAGE.formatted(id));
+        }
+
+        updateBook(index, id, bookRequest);
     }
 
-    public boolean delete(@Positive(message = "Id must be positive") int id) {
-        return this.bookRepository.delete(id);
+    public void delete(@Positive(message = "Id must be positive") int id) {
+        var deleted = this.bookRepository.delete(id);
+
+        if (!deleted) {
+            throw new BookNotFoundException(BOOK_NOT_FOUND_MESSAGE.formatted(id));
+        }
     }
 
     private static boolean bookExists(int index) {
         return (index > 0);
     }
 
-    private BookEntity updateAndGet(int index, int id, BookRequest bookRequest) {
+    private void updateBook(int index, int id, BookRequest bookRequest) {
         var updatedBook = this.requestToEntityMapper.toEntity(bookRequest, id);
         this.bookRepository.update(index, updatedBook);
-        return updatedBook;
     }
 
 }
