@@ -38,6 +38,10 @@ public class BookService {
                 : null;
     }
 
+    public boolean delete() {
+        return false;
+    }
+
     private static boolean bookExists(int index) {
         return (index > -1);
     }

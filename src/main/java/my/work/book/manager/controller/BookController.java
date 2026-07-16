@@ -5,6 +5,7 @@ import my.work.book.manager.entity.Book;
 import my.work.book.manager.service.BookService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -49,6 +50,13 @@ public class BookController {
         var updatedBook = this.bookService.update(title, book);
         return Objects.nonNull(updatedBook)
                 ? ResponseEntity.ok(updatedBook)
+                : ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/{title}")
+    ResponseEntity<Void> delete(@PathVariable String title) {
+        return this.bookService.delete()
+                ? ResponseEntity.noContent().build()
                 : ResponseEntity.notFound().build();
     }
 
