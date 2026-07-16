@@ -64,12 +64,8 @@ public class BookRepository {
         this.books.set(index, book);
     }
 
-    public boolean delete(String title) {
-        return this.books.removeIf(filterByTitle(title));
-    }
-
-    private static Predicate<Book> filterByTitle(String title) {
-        return book -> book.title().equalsIgnoreCase(title);
+    public boolean delete(int id) {
+        return this.books.removeIf(filterById(id));
     }
 
     private static Predicate<Book> filterById(long id) {

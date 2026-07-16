@@ -53,9 +53,9 @@ public class BookController {
                 : ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping("/{title}")
-    ResponseEntity<Void> delete(@PathVariable String title) {
-        return this.bookService.delete(title)
+    @DeleteMapping("/{id}")
+    ResponseEntity<Void> delete(@PathVariable int id) {
+        return this.bookService.delete(id)
                 ? ResponseEntity.noContent().build()
                 : ResponseEntity.notFound().build();
     }
