@@ -36,7 +36,7 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    ResponseEntity<BookEntity> findById(@PathVariable @Positive int id) {
+    ResponseEntity<BookEntity> findById(@PathVariable @Positive(message = "Id must be positive") int id) {
         return this.bookService.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -49,7 +49,10 @@ public class BookController {
     }
 
     @PutMapping("/{id}")
-    ResponseEntity<BookEntity> update(@PathVariable @Positive int id, @RequestBody @Valid BookRequest bookRequest) {
+    ResponseEntity<BookEntity> update(
+            @PathVariable @Positive(message = "Id must be positive") int id,
+            @RequestBody @Valid BookRequest bookRequest) {
+
         var updatedBook = this.bookService.update(id, bookRequest);
         return Objects.nonNull(updatedBook)
                 ? ResponseEntity.ok(updatedBook)
@@ -57,7 +60,7 @@ public class BookController {
     }
 
     @DeleteMapping("/{id}")
-    ResponseEntity<Void> delete(@PathVariable @Positive int id) {
+    ResponseEntity<Void> delete(@PathVariable @Positive(message = "Id must be positive") int id) {
         return this.bookService.delete(id)
                 ? ResponseEntity.noContent().build()
                 : ResponseEntity.notFound().build();

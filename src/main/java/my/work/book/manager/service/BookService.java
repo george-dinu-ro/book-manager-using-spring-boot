@@ -1,5 +1,6 @@
 package my.work.book.manager.service;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import my.work.book.manager.entity.BookEntity;
@@ -28,24 +29,27 @@ public class BookService {
                 : this.bookRepository.findByCategory(category);
     }
 
-    public Optional<BookEntity> findById(@Positive long id) {
+    public Optional<BookEntity> findById(@Positive(message = "Id must be positive") long id) {
         return this.bookRepository.findById(id);
     }
 
-    public long create(BookRequest bookRequest) {
+    public long create(@Valid BookRequest bookRequest) {
         var nextId = this.bookRepository.getNextId();
         var bookEntity = requestToEntityMapper.toEntity(bookRequest, nextId);
         return this.bookRepository.create(bookEntity);
     }
 
-    public BookEntity update(@Positive int id, BookRequest bookRequest) {
+    public BookEntity update(
+            @Positive(message = "Id must be positive") int id,
+            @Valid BookRequest bookRequest) {
+
         var index = this.bookRepository.getIndex(id);
         return bookExists(index)
                 ? updateAndGet(index, id, bookRequest)
                 : null;
     }
 
-    public boolean delete(@Positive int id) {
+    public boolean delete(@Positive(message = "Id must be positive") int id) {
         return this.bookRepository.delete(id);
     }
 
