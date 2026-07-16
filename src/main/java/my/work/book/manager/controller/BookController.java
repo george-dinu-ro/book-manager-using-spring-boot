@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import my.work.book.manager.entity.BookEntity;
 import my.work.book.manager.request.BookRequest;
 import my.work.book.manager.service.BookService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
@@ -31,11 +33,13 @@ public class BookController {
     private final BookService bookService;
 
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     List<BookEntity> findAll(@RequestParam(required = false) String category) {
         return bookService.findAll(category);
     }
 
     @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     ResponseEntity<BookEntity> findById(@PathVariable @Positive(message = "Id must be positive") int id) {
         return this.bookService.findById(id)
                 .map(ResponseEntity::ok)
@@ -43,23 +47,27 @@ public class BookController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     ResponseEntity<BookEntity> create(@RequestBody @Valid BookRequest bookRequest) {
         var id = this.bookService.create(bookRequest);
         return ResponseEntity.created(URI.create("/api/v1/books/" + id)).build();
     }
 
     @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     ResponseEntity<BookEntity> update(
             @PathVariable @Positive(message = "Id must be positive") int id,
             @RequestBody @Valid BookRequest bookRequest) {
 
         var updatedBook = this.bookService.update(id, bookRequest);
+
         return Objects.nonNull(updatedBook)
-                ? ResponseEntity.ok(updatedBook)
+                ? ResponseEntity.noContent().build()
                 : ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     ResponseEntity<Void> delete(@PathVariable @Positive(message = "Id must be positive") int id) {
         return this.bookService.delete(id)
                 ? ResponseEntity.noContent().build()
