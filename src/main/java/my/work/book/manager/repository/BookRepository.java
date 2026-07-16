@@ -66,7 +66,7 @@ public class BookRepository {
     }
 
     public boolean delete(String title) {
-        return false;
+        return this.books.removeIf(filterByTitle(title));
     }
 
     private static Predicate<Book> filterByTitle(String title) {
