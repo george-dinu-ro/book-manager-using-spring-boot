@@ -26,7 +26,7 @@ public class BookService {
     }
 
     public Book create(Book book) {
-        return this.bookRepository.findByTitle(book.title()).isEmpty()
+        return this.bookRepository.findById(book.id()).isEmpty()
                 ? this.bookRepository.create(book)
                 : null;
     }

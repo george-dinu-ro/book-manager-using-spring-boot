@@ -36,12 +36,6 @@ public class BookRepository {
         return this.books;
     }
 
-    public Optional<Book> findByTitle(String title) {
-        return this.books.stream()
-                .filter(filterByTitle(title))
-                .findFirst();
-    }
-
     public Optional<Book> findById(long id) {
         return this.books.stream()
                 .filter(filterById(id))
