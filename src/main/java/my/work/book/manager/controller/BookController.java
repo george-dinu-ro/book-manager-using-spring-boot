@@ -1,5 +1,6 @@
 package my.work.book.manager.controller;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import my.work.book.manager.entity.BookEntity;
@@ -42,13 +43,13 @@ public class BookController {
     }
 
     @PostMapping
-    ResponseEntity<BookEntity> create(@RequestBody BookRequest bookRequest) {
+    ResponseEntity<BookEntity> create(@RequestBody @Valid BookRequest bookRequest) {
         var id = this.bookService.create(bookRequest);
         return ResponseEntity.created(URI.create("/api/v1/books/" + id)).build();
     }
 
     @PutMapping("/{id}")
-    ResponseEntity<BookEntity> update(@PathVariable @Positive int id, @RequestBody BookRequest bookRequest) {
+    ResponseEntity<BookEntity> update(@PathVariable @Positive int id, @RequestBody @Valid BookRequest bookRequest) {
         var updatedBook = this.bookService.update(id, bookRequest);
         return Objects.nonNull(updatedBook)
                 ? ResponseEntity.ok(updatedBook)
