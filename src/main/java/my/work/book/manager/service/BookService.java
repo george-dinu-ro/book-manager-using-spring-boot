@@ -1,7 +1,7 @@
 package my.work.book.manager.service;
 
 import lombok.RequiredArgsConstructor;
-import my.work.book.manager.entity.Book;
+import my.work.book.manager.entity.BookEntity;
 import my.work.book.manager.repository.BookRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,26 +15,26 @@ public class BookService {
 
     private final BookRepository bookRepository;
 
-    public List<Book> findAll(String category) {
+    public List<BookEntity> findAll(String category) {
         return Objects.isNull(category)
                 ? this.bookRepository.findAll()
                 : this.bookRepository.findByCategory(category);
     }
 
-    public Optional<Book> findById(long id) {
+    public Optional<BookEntity> findById(long id) {
         return this.bookRepository.findById(id);
     }
 
-    public Book create(Book book) {
-        return this.bookRepository.findById(book.id()).isEmpty()
-                ? this.bookRepository.create(book)
+    public BookEntity create(BookEntity bookEntity) {
+        return this.bookRepository.findById(bookEntity.id()).isEmpty()
+                ? this.bookRepository.create(bookEntity)
                 : null;
     }
 
-    public Book update(int id, Book book) {
+    public BookEntity update(int id, BookEntity bookEntity) {
         var index = this.bookRepository.getIndex(id);
         return bookExists(index)
-                ? updateAndGet(index, id, book)
+                ? updateAndGet(index, id, bookEntity)
                 : null;
     }
 
@@ -46,18 +46,18 @@ public class BookService {
         return (index > -1);
     }
 
-    private static Book getUpdatedBook(int id, Book book) {
-        return Book.builder()
+    private static BookEntity getUpdatedBook(int id, BookEntity bookEntity) {
+        return BookEntity.builder()
                 .id(id)
-                .title(book.title())
-                .author(book.author())
-                .category(book.category())
-                .rating(book.rating())
+                .title(bookEntity.title())
+                .author(bookEntity.author())
+                .category(bookEntity.category())
+                .rating(bookEntity.rating())
                 .build();
     }
 
-    private Book updateAndGet(int index, int id, Book book) {
-        var updateBook = getUpdatedBook(id, book);
+    private BookEntity updateAndGet(int index, int id, BookEntity bookEntity) {
+        var updateBook = getUpdatedBook(id, bookEntity);
         this.bookRepository.update(index, updateBook);
         return updateBook;
     }
