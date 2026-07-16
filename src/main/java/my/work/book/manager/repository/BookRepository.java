@@ -48,9 +48,9 @@ public class BookRepository {
                 .toList();
     }
 
-    public BookEntity create(BookEntity bookEntity) {
+    public long create(BookEntity bookEntity) {
         this.bookEntities.add(bookEntity);
-        return bookEntity;
+        return bookEntity.id();
     }
 
     public int getIndex(int id) {
@@ -66,6 +66,12 @@ public class BookRepository {
 
     public boolean delete(int id) {
         return this.bookEntities.removeIf(filterById(id));
+    }
+
+    public long getNextId() {
+        return !this.bookEntities.isEmpty()
+                ? (this.bookEntities.getLast().id() + 1)
+                : 1;
     }
 
     private static Predicate<BookEntity> filterById(long id) {

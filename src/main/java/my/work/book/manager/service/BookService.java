@@ -2,7 +2,9 @@ package my.work.book.manager.service;
 
 import lombok.RequiredArgsConstructor;
 import my.work.book.manager.entity.BookEntity;
+import my.work.book.manager.mapper.RequestToEntityMapper;
 import my.work.book.manager.repository.BookRepository;
+import my.work.book.manager.request.BookRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +17,8 @@ public class BookService {
 
     private final BookRepository bookRepository;
 
+    private final RequestToEntityMapper requestToEntityMapper;
+
     public List<BookEntity> findAll(String category) {
         return Objects.isNull(category)
                 ? this.bookRepository.findAll()
@@ -25,10 +29,9 @@ public class BookService {
         return this.bookRepository.findById(id);
     }
 
-    public BookEntity create(BookEntity bookEntity) {
-        return this.bookRepository.findById(bookEntity.id()).isEmpty()
-                ? this.bookRepository.create(bookEntity)
-                : null;
+    public long create(BookRequest bookRequest) {
+        var bookEntity = requestToEntityMapper.toEntity(bookRequest);
+        return this.bookRepository.create(bookEntity);
     }
 
     public BookEntity update(int id, BookEntity bookEntity) {

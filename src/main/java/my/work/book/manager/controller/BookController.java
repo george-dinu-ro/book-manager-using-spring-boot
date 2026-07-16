@@ -2,8 +2,8 @@ package my.work.book.manager.controller;
 
 import lombok.RequiredArgsConstructor;
 import my.work.book.manager.entity.BookEntity;
+import my.work.book.manager.request.BookRequest;
 import my.work.book.manager.service.BookService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Objects;
 
@@ -38,11 +39,9 @@ public class BookController {
     }
 
     @PostMapping
-    ResponseEntity<BookEntity> create(@RequestBody BookEntity bookEntity) {
-        var createdBook = this.bookService.create(bookEntity);
-        return Objects.nonNull(createdBook)
-                ? ResponseEntity.status(HttpStatus.CREATED).body(createdBook)
-                : ResponseEntity.status(HttpStatus.CONFLICT).build();
+    ResponseEntity<BookEntity> create(@RequestBody BookRequest bookRequest) {
+        var id = this.bookService.create(bookRequest);
+        return ResponseEntity.created(URI.create("/api/v1/books/" + id)).build();
     }
 
     @PutMapping("/{id}")
