@@ -38,7 +38,7 @@ public class BookService {
         return this.bookRepository.create(bookEntity);
     }
 
-    public BookEntity update(int id, BookRequest bookRequest) {
+    public BookEntity update(@Positive int id, BookRequest bookRequest) {
         var index = this.bookRepository.getIndex(id);
         return bookExists(index)
                 ? updateAndGet(index, id, bookRequest)

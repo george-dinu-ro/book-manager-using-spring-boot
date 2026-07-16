@@ -48,7 +48,7 @@ public class BookController {
     }
 
     @PutMapping("/{id}")
-    ResponseEntity<BookEntity> update(@PathVariable int id, @RequestBody BookRequest bookRequest) {
+    ResponseEntity<BookEntity> update(@PathVariable @Positive int id, @RequestBody BookRequest bookRequest) {
         var updatedBook = this.bookService.update(id, bookRequest);
         return Objects.nonNull(updatedBook)
                 ? ResponseEntity.ok(updatedBook)
