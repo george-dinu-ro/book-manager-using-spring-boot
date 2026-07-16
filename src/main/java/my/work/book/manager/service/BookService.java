@@ -38,8 +38,8 @@ public class BookService {
                 : null;
     }
 
-    public boolean delete() {
-        return this.bookRepository.delete();
+    public boolean delete(String title) {
+        return this.bookRepository.delete(title);
     }
 
     private static boolean bookExists(int index) {
