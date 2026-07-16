@@ -1,5 +1,8 @@
 package my.work.book.manager.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +30,7 @@ import java.util.Objects;
 @RequestMapping("/api/v1/books")
 @RestController
 @Validated
+@Tag(name = "Books rest api endpoints", description = "Operations related to books")
 @RequiredArgsConstructor
 public class BookController {
 
@@ -34,13 +38,24 @@ public class BookController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    List<BookEntity> findAll(@RequestParam(required = false) String category) {
+    @Operation(summary = "Get all books", description = "Retrieve a list of all available books")
+    List<BookEntity> findAll(
+            @RequestParam(required = false)
+            @Parameter(description = "Optional query parameter")
+            String category) {
+
         return bookService.findAll(category);
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    ResponseEntity<BookEntity> findById(@PathVariable @Positive(message = "Id must be positive") int id) {
+    @Operation(summary = "Get a books by id", description = "Retrieve a specific book by id")
+    ResponseEntity<BookEntity> findById(
+            @PathVariable
+            @Positive(message = "Id must be positive")
+            @Parameter(description = "Id of the book to be retrieved")
+            int id) {
+
         return this.bookService.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -48,16 +63,28 @@ public class BookController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    ResponseEntity<BookEntity> create(@RequestBody @Valid BookRequest bookRequest) {
+    @Operation(summary = "Create a new book", description = "Add a new book to storage")
+    ResponseEntity<BookEntity> create(
+            @RequestBody
+            @Valid
+            BookRequest bookRequest) {
+
         var id = this.bookService.create(bookRequest);
         return ResponseEntity.created(URI.create("/api/v1/books/" + id)).build();
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "Update a book", description = "Update the details of an existing book")
     ResponseEntity<BookEntity> update(
-            @PathVariable @Positive(message = "Id must be positive") int id,
-            @RequestBody @Valid BookRequest bookRequest) {
+            @PathVariable
+            @Positive(message = "Id must be positive")
+            @Parameter(description = "Id of the book to be updated")
+            int id,
+
+            @RequestBody
+            @Valid
+            BookRequest bookRequest) {
 
         var updatedBook = this.bookService.update(id, bookRequest);
 
@@ -68,7 +95,13 @@ public class BookController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    ResponseEntity<Void> delete(@PathVariable @Positive(message = "Id must be positive") int id) {
+    @Operation(summary = "Delete a book", description = "Remove a book from storage")
+    ResponseEntity<Void> delete(
+            @PathVariable
+            @Positive(message = "Id must be positive")
+            @Parameter(description = "Id of the book to be deleted")
+            int id) {
+
         return this.bookService.delete(id)
                 ? ResponseEntity.noContent().build()
                 : ResponseEntity.notFound().build();
