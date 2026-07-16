@@ -52,6 +52,13 @@ public class BookRepository {
         return book;
     }
 
+    public int getIndex(String title) {
+        return 0;
+    }
+
+    public void update(int index, Book book) {
+    }
+
     private static Predicate<Book> filterByTitle(String title) {
         return book -> book.title().equalsIgnoreCase(title);
     }

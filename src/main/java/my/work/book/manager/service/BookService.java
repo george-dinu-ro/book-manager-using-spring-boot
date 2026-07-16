@@ -32,6 +32,28 @@ public class BookService {
     }
 
     public Book update(String title, Book book) {
-        return null;
+        var index = bookRepository.getIndex(title);
+        return bookExists(index)
+                ? updateAndGet(index, title, book)
+                : null;
     }
+
+    private static boolean bookExists(int index) {
+        return index > 0;
+    }
+
+    private static Book getUpdatedBook(String title, Book book) {
+        return Book.builder()
+                .title(title)
+                .author(book.author())
+                .category(book.category())
+                .build();
+    }
+
+    private Book updateAndGet(int index, String title, Book book) {
+        var updateBook = getUpdatedBook(title, book);
+        bookRepository.update(index, updateBook);
+        return updateBook;
+    }
+
 }
