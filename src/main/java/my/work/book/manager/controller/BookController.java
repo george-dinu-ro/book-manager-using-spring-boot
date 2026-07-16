@@ -31,14 +31,14 @@ public class BookController {
 
     @GetMapping("/{title}")
     ResponseEntity<Book> findByTitle(@PathVariable String title) {
-        return bookService.findByTitle(title)
+        return this.bookService.findByTitle(title)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
     ResponseEntity<Book> create(@RequestBody Book book) {
-        var createdBook = bookService.create(book);
+        var createdBook = this.bookService.create(book);
         return Objects.nonNull(createdBook)
                 ? ResponseEntity.status(HttpStatus.CREATED).body(createdBook)
                 : ResponseEntity.status(HttpStatus.CONFLICT).build();
@@ -46,7 +46,7 @@ public class BookController {
 
     @PutMapping("/{title}")
     ResponseEntity<Book> update(@PathVariable String title, @RequestBody Book book) {
-        var updatedBook = bookService.update(title, book);
+        var updatedBook = this.bookService.update(title, book);
         return Objects.nonNull(updatedBook)
                 ? ResponseEntity.ok(updatedBook)
                 : ResponseEntity.notFound().build();

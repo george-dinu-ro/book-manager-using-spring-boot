@@ -17,29 +17,29 @@ public class BookService {
 
     public List<Book> findAll(String category) {
         return Objects.isNull(category)
-                ? bookRepository.findAll()
-                : bookRepository.findByCategory(category);
+                ? this.bookRepository.findAll()
+                : this.bookRepository.findByCategory(category);
     }
 
     public Optional<Book> findByTitle(String title) {
-        return bookRepository.findByTitle(title);
+        return this.bookRepository.findByTitle(title);
     }
 
     public Book create(Book book) {
-        return bookRepository.findByTitle(book.title()).isEmpty()
-                ? bookRepository.create(book)
+        return this.bookRepository.findByTitle(book.title()).isEmpty()
+                ? this.bookRepository.create(book)
                 : null;
     }
 
     public Book update(String title, Book book) {
-        var index = bookRepository.getIndex(title);
+        var index = this.bookRepository.getIndex(title);
         return bookExists(index)
                 ? updateAndGet(index, title, book)
                 : null;
     }
 
     private static boolean bookExists(int index) {
-        return index > 0;
+        return (index > -1);
     }
 
     private static Book getUpdatedBook(String title, Book book) {
@@ -52,7 +52,7 @@ public class BookService {
 
     private Book updateAndGet(int index, String title, Book book) {
         var updateBook = getUpdatedBook(title, book);
-        bookRepository.update(index, updateBook);
+        this.bookRepository.update(index, updateBook);
         return updateBook;
     }
 

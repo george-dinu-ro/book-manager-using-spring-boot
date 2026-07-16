@@ -7,7 +7,9 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.IntPredicate;
 import java.util.function.Predicate;
+import java.util.stream.IntStream;
 
 @Component
 public class BookRepository {
@@ -53,10 +55,14 @@ public class BookRepository {
     }
 
     public int getIndex(String title) {
-        return 0;
+        return IntStream.range(0, this.books.size())
+                .filter(filterByIndex(title))
+                .findFirst()
+                .orElse(-1);
     }
 
     public void update(int index, Book book) {
+        this.books.set(index, book);
     }
 
     private static Predicate<Book> filterByTitle(String title) {
@@ -65,6 +71,10 @@ public class BookRepository {
 
     private static Predicate<Book> filterByCategory(String category) {
         return book -> book.category().equalsIgnoreCase(category);
+    }
+
+    private IntPredicate filterByIndex(String title) {
+        return index -> this.books.get(index).title().equalsIgnoreCase(title);
     }
 
 }
