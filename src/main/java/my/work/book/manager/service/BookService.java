@@ -30,14 +30,15 @@ public class BookService {
     }
 
     public long create(BookRequest bookRequest) {
-        var bookEntity = requestToEntityMapper.toEntity(bookRequest);
+        var nextId = this.bookRepository.getNextId();
+        var bookEntity = requestToEntityMapper.toEntity(bookRequest, nextId);
         return this.bookRepository.create(bookEntity);
     }
 
-    public BookEntity update(int id, BookEntity bookEntity) {
+    public BookEntity update(int id, BookRequest bookRequest) {
         var index = this.bookRepository.getIndex(id);
         return bookExists(index)
-                ? updateAndGet(index, id, bookEntity)
+                ? updateAndGet(index, id, bookRequest)
                 : null;
     }
 
@@ -46,23 +47,13 @@ public class BookService {
     }
 
     private static boolean bookExists(int index) {
-        return (index > -1);
+        return (index > 0);
     }
 
-    private static BookEntity getUpdatedBook(int id, BookEntity bookEntity) {
-        return BookEntity.builder()
-                .id(id)
-                .title(bookEntity.title())
-                .author(bookEntity.author())
-                .category(bookEntity.category())
-                .rating(bookEntity.rating())
-                .build();
-    }
-
-    private BookEntity updateAndGet(int index, int id, BookEntity bookEntity) {
-        var updateBook = getUpdatedBook(id, bookEntity);
-        this.bookRepository.update(index, updateBook);
-        return updateBook;
+    private BookEntity updateAndGet(int index, int id, BookRequest bookRequest) {
+        var updatedBook = this.requestToEntityMapper.toEntity(bookRequest, id);
+        this.bookRepository.update(index, updatedBook);
+        return updatedBook;
     }
 
 }

@@ -45,8 +45,8 @@ public class BookController {
     }
 
     @PutMapping("/{id}")
-    ResponseEntity<BookEntity> update(@PathVariable int id, @RequestBody BookEntity bookEntity) {
-        var updatedBook = this.bookService.update(id, bookEntity);
+    ResponseEntity<BookEntity> update(@PathVariable int id, @RequestBody BookRequest bookRequest) {
+        var updatedBook = this.bookService.update(id, bookRequest);
         return Objects.nonNull(updatedBook)
                 ? ResponseEntity.ok(updatedBook)
                 : ResponseEntity.notFound().build();
