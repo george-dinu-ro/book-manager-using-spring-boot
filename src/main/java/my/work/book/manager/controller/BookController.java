@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -37,10 +38,18 @@ public class BookController {
 
     @PostMapping
     ResponseEntity<Book> create(@RequestBody Book book) {
-        var createBook = bookService.create(book);
-        return Objects.nonNull(createBook)
-                ? ResponseEntity.status(HttpStatus.CREATED).body(createBook)
+        var createdBook = bookService.create(book);
+        return Objects.nonNull(createdBook)
+                ? ResponseEntity.status(HttpStatus.CREATED).body(createdBook)
                 : ResponseEntity.status(HttpStatus.CONFLICT).build();
+    }
+
+    @PutMapping("/{title}")
+    ResponseEntity<Book> update(@PathVariable String title, @RequestBody Book book) {
+        var updatedBook = bookService.update(title, book);
+        return Objects.nonNull(updatedBook)
+                ? ResponseEntity.ok(updatedBook)
+                : ResponseEntity.notFound().build();
     }
 
 }

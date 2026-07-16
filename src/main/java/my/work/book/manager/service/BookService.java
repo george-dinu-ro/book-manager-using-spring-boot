@@ -31,4 +31,7 @@ public class BookService {
                 : null;
     }
 
+    public Book update(String title, Book book) {
+        return null;
+    }
 }
