@@ -21,8 +21,8 @@ public class BookService {
                 : this.bookRepository.findByCategory(category);
     }
 
-    public Optional<Book> findByTitle(String title) {
-        return this.bookRepository.findByTitle(title);
+    public Optional<Book> findById(long id) {
+        return this.bookRepository.findById(id);
     }
 
     public Book create(Book book) {

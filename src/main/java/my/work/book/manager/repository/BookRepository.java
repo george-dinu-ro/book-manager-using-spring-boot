@@ -42,6 +42,12 @@ public class BookRepository {
                 .findFirst();
     }
 
+    public Optional<Book> findById(long id) {
+        return this.books.stream()
+                .filter(filterById(id))
+                .findFirst();
+    }
+
     public List<Book> findByCategory(String category) {
         return this.books.stream()
                 .filter(filterByCategory(category))
@@ -70,6 +76,10 @@ public class BookRepository {
 
     private static Predicate<Book> filterByTitle(String title) {
         return book -> book.title().equalsIgnoreCase(title);
+    }
+
+    private static Predicate<Book> filterById(long id) {
+        return book -> book.id() == id;
     }
 
     private static Predicate<Book> filterByCategory(String category) {

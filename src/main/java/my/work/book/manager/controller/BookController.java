@@ -30,9 +30,9 @@ public class BookController {
         return bookService.findAll(category);
     }
 
-    @GetMapping("/{title}")
-    ResponseEntity<Book> findByTitle(@PathVariable String title) {
-        return this.bookService.findByTitle(title)
+    @GetMapping("/{id}")
+    ResponseEntity<Book> findById(@PathVariable int id) {
+        return this.bookService.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
