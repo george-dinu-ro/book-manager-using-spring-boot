@@ -20,17 +20,16 @@ public class BookRepository {
     public void init() {
         this.books.addAll(
                 List.of(
-                        new Book("Clean Code", "Robert C. Martin", "Programming"),
-                        new Book("Effective Java", "Joshua Bloch", "Programming"),
-                        new Book("Design Patterns", "Erich Gamma", "Software Engineering"),
-                        new Book("The Pragmatic Programmer", "Andrew Hunt", "Programming"),
-                        new Book("Refactoring", "Martin Fowler", "Software Engineering"),
-                        new Book("Atomic Habits", "James Clear", "Personal Development"),
-                        new Book("1984", "George Orwell", "Fiction"),
-                        new Book("The Hobbit", "J.R.R. Tolkien", "Fantasy"),
-                        new Book("Sapiens", "Yuval Noah Harari", "History"),
-                        new Book("Thinking, Fast and Slow", "Daniel Kahneman", "Psychology")
-                ));
+                        new Book(1, "Clean Code", "Robert C. Martin", "Programming", 5),
+                        new Book(2, "Effective Java", "Joshua Bloch", "Programming", 4),
+                        new Book(3, "Design Patterns", "Erich Gamma", "Software Engineering", 5),
+                        new Book(4, "The Pragmatic Programmer", "Andrew Hunt", "Programming", 5),
+                        new Book(5, "Refactoring", "Martin Fowler", "Software Engineering", 3),
+                        new Book(6, "Atomic Habits", "James Clear", "Personal Development", 2),
+                        new Book(7, "1984", "George Orwell", "Fiction", 2),
+                        new Book(8, "The Hobbit", "J.R.R. Tolkien", "Fantasy", 4),
+                        new Book(9, "Sapiens", "Yuval Noah Harari", "History", 2),
+                        new Book(10, "Thinking, Fast and Slow", "Daniel Kahneman", "Psychology", 4)));
     }
 
     public List<Book> findAll() {
